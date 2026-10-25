@@ -1,0 +1,4 @@
+# Bundled Bootstrap builds; exclude from GitHub language stats
+VueFrontend/assets/css/dashboard.css linguist-vendored
+VueFrontend/assets/sidebar/css/styles.css linguist-vendored
+VueFrontend/assets/css/components/Partials/CustomNuxtLink.css linguist-vendored

@@ -16,9 +16,4 @@
 const { summary } = defineProps(['summary']);
 </script>
 
-<style scoped>
-.summary{
-    text-align: left !important;
-}
-
-</style>
+<style scoped src="~/assets/css/components/ResumeTemp3/Summary.css"></style>

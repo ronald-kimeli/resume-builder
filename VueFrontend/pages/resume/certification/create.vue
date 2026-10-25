@@ -160,4 +160,4 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style src="~/assets/css/pages/resume/certification/create.css"></style>

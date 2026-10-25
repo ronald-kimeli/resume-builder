@@ -22,36 +22,4 @@
 
 </script>
 
-<style scoped>
-#section-title {
-    border-bottom: 2px solid #080808 !important;
-}
-
-.experience {
-    text-align: left !important;
-}
-
-#experience-title {
-    text-align: start !important;
-    text-decoration: none !important;
-    width: auto !important;
-}
-
-.iconic-section {
-    text-align: start !important;
-    padding: auto !important;
-    width: auto !important;
-}
-
-img {
-    background-color: inherit !important;
-    height: 10px !important;
-    width: 10px !important;
-    margin-right: 4px !important;
-}
-
-.company-title {
-    background-color: inherit !important;
-    size: 20px !important;
-}
-</style>
+<style scoped src="~/assets/css/components/ResumeTemp1/Experience.css"></style>

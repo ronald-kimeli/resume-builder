@@ -1,3 +1,4 @@
+from pydantic import ConfigDict
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, TYPE_CHECKING
 
@@ -25,19 +26,17 @@ class RefereeV1CreateRequest(RefereeV1Base):
     # user_id: int
     pass
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "card_title": "Referee",
-                "full_name": "Full_Name",
-                "phone_number": "A phone number",
-                "company_name": "Some_Company_Name",
-                "occupation": "Some_Job_Title",
-                "address": "Some_Address",
-                # "user_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Referee",
+            "full_name": "Full_Name",
+            "phone_number": "A phone number",
+            "company_name": "Some_Company_Name",
+            "occupation": "Some_Job_Title",
+            "address": "Some_Address",
+            # "user_id": 0,
         }
-
+    })
 
 class RefereeV1Create(RefereeV1Base):
     user_id: Optional[int] = None
@@ -47,20 +46,18 @@ class RefereeV1Read(RefereeV1Base):
     user_id: int
     referee_id: int
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "card_title": "Referee",
-                "full_name": "Full_Name",
-                "phone_number": "A phone number",
-                "company_name": "Some_Company_Name",
-                "occupation": "Some_Job_Title",
-                "address": "Some_Address",
-                "user_id": 0,
-                "referee_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Referee",
+            "full_name": "Full_Name",
+            "phone_number": "A phone number",
+            "company_name": "Some_Company_Name",
+            "occupation": "Some_Job_Title",
+            "address": "Some_Address",
+            "user_id": 0,
+            "referee_id": 0,
         }
-
+    })
 
 class RefereeV1Update(SQLModel):
     card_title: Optional[str] = None
@@ -70,16 +67,14 @@ class RefereeV1Update(SQLModel):
     occupation: Optional[str] = None
     address: Optional[str] = None
 
-    class Config:
-        exclude = {"user_id"}
-        schema_extra = {
-            "example": {
-                "card_title": "Referee",
-                "full_name": "Full_Name",
-                "phone_number": "A phone number",
-                "company_name": "Some_Company_Name",
-                "occupation": "Some_Job_Title",
-                "address": "Some_Address",
-                # "user_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Referee",
+            "full_name": "Full_Name",
+            "phone_number": "A phone number",
+            "company_name": "Some_Company_Name",
+            "occupation": "Some_Job_Title",
+            "address": "Some_Address",
+            # "user_id": 0,
         }
+    })

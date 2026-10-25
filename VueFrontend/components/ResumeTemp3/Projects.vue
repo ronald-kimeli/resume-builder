@@ -32,9 +32,4 @@ const { projects } = defineProps(['projects'])
 
 </script>
 
-<style lang="scss" scoped>
-.projects {
-  text-align: left !important;
-}
-
-</style>
+<style lang="scss" scoped src="~/assets/css/components/ResumeTemp3/Projects.scss"></style>

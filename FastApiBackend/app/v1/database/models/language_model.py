@@ -1,3 +1,4 @@
+from pydantic import ConfigDict
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List, TYPE_CHECKING
 
@@ -28,16 +29,14 @@ class LanguageV1CreateRequest(LanguageV1Base):
     # user_id: int
     pass
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "card_title": "Card Title",
-                "language_name": "Language Name",
-                "profeciency_level": 5,
-                # "user_id": "valid id",
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Card Title",
+            "language_name": "Language Name",
+            "profeciency_level": 5,
+            # "user_id": "valid id",
         }
-
+    })
 
 class LanguageV1Create(LanguageV1Base):
     user_id: Optional[int] = None
@@ -49,17 +48,15 @@ class LanguageV1Read(LanguageV1Base):
     user_id: int
     language_id: int
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "card_title": "Card Title",
-                "language_name": "Language Name",
-                "profeciency_level": 5,
-                "user_id": "valid id",
-                "language_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Card Title",
+            "language_name": "Language Name",
+            "profeciency_level": 5,
+            "user_id": "valid id",
+            "language_id": 0,
         }
-
+    })
 
 # The `LanguageUpdate` class represents an update to a language entry in a database, including the
 # card title, language name, and proficiency level.
@@ -68,13 +65,11 @@ class LanguageV1Update(SQLModel):
     language_name: Optional[str] = None
     profeciency_level: Optional[int] = None
 
-    class Config:
-        exclude = {"user_id"}
-        schema_extra = {
-            "example": {
-                "card_title": "Card Title",
-                "language_name": "Language Name",
-                "profeciency_level": 5,
-                # "user_id": "valid id",
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Card Title",
+            "language_name": "Language Name",
+            "profeciency_level": 5,
+            # "user_id": "valid id",
         }
+    })

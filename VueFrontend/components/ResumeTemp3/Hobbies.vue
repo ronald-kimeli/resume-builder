@@ -18,9 +18,4 @@ const { hobbies } = defineProps(['hobbies']);
 
 </script>
 
-<style lang="scss" scoped>
-.Hobbies {
-    text-align: left !important;
-}
-
-</style>
+<style lang="scss" scoped src="~/assets/css/components/ResumeTemp3/Hobbies.scss"></style>

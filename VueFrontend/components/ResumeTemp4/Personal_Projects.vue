@@ -43,9 +43,4 @@
 
 </script>
 
-<style lang="scss" scoped>
-.projects {
-  text-align: left !important;
-}
-
-</style>
+<style lang="scss" scoped src="~/assets/css/components/ResumeTemp4/Personal_Projects.scss"></style>

@@ -7,13 +7,21 @@ export default defineNuxtConfig({
     port: 5173, // you can replace this port with any port
   },
 
+  // Production output is minified (JS via esbuild, CSS, and the Nitro server bundle)
+  nitro: {
+    minify: true,
+  },
+
   vite: {
+    build: {
+      minify: 'esbuild',
+      cssMinify: true,
+    },
     server: {
-      hmr: {
-        protocol: 'ws',
-        host: '0.0.0.0',  
-      }
-    }
+      // bind mounts inside Docker don't always deliver file events; poll so edits hot-reload
+      watch: { usePolling: !!process.env.CHOKIDAR_USEPOLLING },
+      hmr: { port: 24678, clientPort: 24678 },
+    },
   },
 
   app: {
@@ -37,7 +45,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      BASE_URL: process.env.BASE_URL
+      BASE_URL: process.env.BASE_URL,
+      SOCKET_URL: process.env.SOCKET_URL || 'ws://localhost:4000'
     }
   },
   plugins: [

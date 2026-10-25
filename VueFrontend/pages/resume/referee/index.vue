@@ -195,4 +195,4 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style src="~/assets/css/pages/resume/referee/index.css"></style>

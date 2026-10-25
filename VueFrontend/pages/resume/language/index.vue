@@ -145,4 +145,4 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style src="~/assets/css/pages/resume/language/index.css"></style>

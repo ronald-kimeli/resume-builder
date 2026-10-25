@@ -17,9 +17,4 @@ const { objective } = defineProps(['objective'])
 
 </script>
 
-<style scoped>
-.objective{
-    text-align: left !important;
-}
-
-</style>
+<style scoped src="~/assets/css/components/ResumeTemp3/Objective.css"></style>

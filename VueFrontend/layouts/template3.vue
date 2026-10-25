@@ -11,11 +11,5 @@
 
 </script>
 
-<style scoped>
-.mains {
-    background: #ffffff !important;
-    /* margin: 20px !important;
-    padding: 20px !important; */
-}
-</style>
+<style scoped src="~/assets/css/layouts/template3.css"></style>
   

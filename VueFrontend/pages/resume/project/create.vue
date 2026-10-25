@@ -207,4 +207,4 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style src="~/assets/css/pages/resume/project/create.css"></style>

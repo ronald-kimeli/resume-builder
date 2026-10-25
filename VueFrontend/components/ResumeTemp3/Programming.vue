@@ -22,11 +22,4 @@
 
 </script>
 
-<style lang="scss" scoped>
-
-.programming {
-    text-align: left !important;
-}
-
-
-</style>
+<style lang="scss" scoped src="~/assets/css/components/ResumeTemp3/Programming.scss"></style>

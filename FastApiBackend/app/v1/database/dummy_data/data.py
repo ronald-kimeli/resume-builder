@@ -6,7 +6,8 @@ from app.v1.database.models.language_model import LanguageV1Create
 from app.v1.database.models.certification_model import CertificationV1Create
 from app.v1.database.models.referee_model import RefereeV1Create
 from app.v1.database.models.project_model import ProjectV1Create
-from datetime import date
+from app.v1.database.models.verification_model import VerificationV1Create
+from datetime import date, datetime, timedelta, timezone
 from pydantic import EmailStr
 
 start_date = date(year=2017, month=9, day=21)
@@ -204,5 +205,13 @@ class DummyUserData:
             company_name=f"Some_Company_Name_2",
             occupation=f"Some_Job_Title_2",
             address=f"Some_Address_2",
+            user_id=user_id,
+        )
+        now = datetime.now(timezone.utc)
+        self.dummy_verification = VerificationV1Create(
+            otp_code=123456,
+            otp_created_at=now,
+            otp_expiry_at=now + timedelta(minutes=5),
+            number_verified=True,
             user_id=user_id,
         )

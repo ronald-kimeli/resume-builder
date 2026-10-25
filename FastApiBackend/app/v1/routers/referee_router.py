@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from app.core.db import get_db_session
 from typing import List
-from sqlmodel import Session
+from sqlmodel.ext.asyncio.session import AsyncSession
 from app.v1.database.services.referee_services import RefereeCRUDServices
 from app.v1.database.models.referee_model import (
     RefereeV1Update,
@@ -13,15 +13,15 @@ router = APIRouter(prefix="/user/{user_id}/referee", tags=["Referee Version 1"])
 
 
 @router.get("/", response_model=List[RefereeV1Read])
-def read_user_referee(*, session: Session = Depends(get_db_session), user_id: int):
+async def read_user_referee(*, session: AsyncSession = Depends(get_db_session), user_id: int):
     referee_crud_services = RefereeCRUDServices(session=session)
     return referee_crud_services.read_user_referee_details(user_id=user_id)
 
 
 @router.post("/", response_model=RefereeV1Read)
-def create_user_referee(
+async def create_user_referee(
     *,
-    session: Session = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db_session),
     user_id: int,
     user_referee_request: RefereeV1CreateRequest,
 ):
@@ -32,9 +32,9 @@ def create_user_referee(
 
 
 @router.patch("/{referee_id}", response_model=RefereeV1Read)
-def update_user_langauge(
+async def update_user_langauge(
     *,
-    session: Session = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db_session),
     user_id: int,
     referee_id: int,
     update_referee: RefereeV1Update,
@@ -46,9 +46,9 @@ def update_user_langauge(
 
 
 @router.delete("/{referee_id}")
-def delete_user_referee(
+async def delete_user_referee(
     *,
-    session: Session = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db_session),
     user_id: int,
     referee_id: int,
 ):

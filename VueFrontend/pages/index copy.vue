@@ -117,4 +117,4 @@ definePageMeta({
 
 </script>
 
-<style scoped></style>
+<style scoped src="~/assets/css/pages/index-copy.css"></style>

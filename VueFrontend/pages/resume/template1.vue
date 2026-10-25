@@ -105,4 +105,4 @@ definePageMeta({
 
 </script>
   
-<style scoped></style>
+<style scoped src="~/assets/css/pages/resume/template1.css"></style>

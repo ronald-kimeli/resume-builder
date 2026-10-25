@@ -18,11 +18,4 @@ const { skills } = defineProps(['skills'])
 
 </script>
 
-<style scoped>
-
-.skills {
-    text-align: left !important;
-}
-
-  
-</style>
+<style scoped src="~/assets/css/components/ResumeTemp3/Skills.css"></style>

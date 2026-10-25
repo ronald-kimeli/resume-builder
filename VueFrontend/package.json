@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
-    "@types/node": "^18.16.19",
+    "@types/node": "latest",
     "@types/puppeteer": "^7.0.4",
     "nuxt": "^3.14.1592",
     "sass-loader": "^16.0.3",
@@ -27,5 +27,9 @@
     "puppeteer": "^23.9.0",
     "sass": "^1.81.0",
     "vue3-toastify": "^0.2.3"
+  },
+  "packageManager": "pnpm@12.15.0",
+  "engines": {
+    "node": ">=24"
   }
 }

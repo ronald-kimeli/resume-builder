@@ -8,6 +8,4 @@ Register
 
 </script>
 
-<style  scoped>
-
-</style>
+<style  scoped src="~/assets/css/components/Auth/Register.css"></style>

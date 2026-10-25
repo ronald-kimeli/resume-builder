@@ -33,7 +33,5 @@
   };
   </script>
   
-  <style scoped>
-
-  </style>
+  <style scoped src="~/assets/css/layouts/default.css"></style>
   

@@ -1,6 +1,6 @@
 from pydantic import EmailStr
-from sqlmodel import Session
-from app.core.db import engine
+from sqlmodel import select
+from app.core.db import async_session
 from datetime import date
 from app.v1.database.dummy_data.data import DummyUserData
 from app.v1.database.models.user_model import UserV1
@@ -12,6 +12,7 @@ from app.v1.database.models.certification_model import CertificationV1
 
 from app.v1.database.models.referee_model import RefereeV1
 from app.v1.database.models.project_model import ProjectV1
+from app.v1.database.models.verification_model import VerificationV1
 
 
 class LoadDummyData(DummyUserData):
@@ -24,111 +25,47 @@ class LoadDummyData(DummyUserData):
             dummy_phone_number=dummy_phone_number,
         )
 
-    def create_user(self):
-        with Session(engine) as session:
-            db_user_instance = session.get(UserV1, self.user_id)
-            if not db_user_instance:
-                # create user
-                db_user_entry = UserV1.from_orm(self.dummy_user)
+    async def create_user(self) -> str:
+        """Seed the user and every related table, filling only what is still missing."""
+        async with async_session() as session:
+            created = []
 
-                session.add(db_user_entry)
-                session.commit()
-                session.refresh(db_user_entry)
+            if not await session.get(UserV1, self.user_id):
+                # The user row must exist first; everything else references it.
+                session.add(UserV1.model_validate(self.dummy_user))
+                await session.commit()
+                created.append("user")
 
-                # Add education fields to user
-                user_education_db_create_1 = EducationV1.from_orm(
-                    self.dummy_education_1
-                )
-                session.add(user_education_db_create_1)
-                session.commit()
-                session.refresh(user_education_db_create_1)
+            related = (
+                (ProfileV1, (self.dummy_profile,)),
+                (EducationV1, (self.dummy_education_1, self.dummy_education_2)),
+                (ExperienceV1, (self.dummy_experience_1, self.dummy_experience_2)),
+                (ProjectV1, (self.dummy_project_1, self.dummy_project_2)),
+                (
+                    LanguageV1,
+                    (
+                        self.dummy_language_1,
+                        self.dummy_language_2,
+                        self.dummy_language_3,
+                        self.dummy_language_4,
+                    ),
+                ),
+                (CertificationV1, (self.dummy_certification_1, self.dummy_certification_2)),
+                (RefereeV1, (self.dummy_referee_1, self.dummy_referee_2)),
+                (VerificationV1, (self.dummy_verification,)),
+            )
+            for model, items in related:
+                has_rows = (
+                    await session.exec(
+                        select(model).where(model.user_id == self.user_id).limit(1)
+                    )
+                ).first()
+                if has_rows:
+                    continue
+                session.add_all(model.model_validate(item) for item in items)
+                created.append(model.__tablename__)
+            await session.commit()
 
-                user_education_db_create_2 = EducationV1.from_orm(
-                    self.dummy_education_2
-                )
-                session.add(user_education_db_create_2)
-                session.commit()
-                session.refresh(user_education_db_create_2)
-
-                # Add experience fields to user
-                user_experience_db_create_1 = ExperienceV1.from_orm(
-                    self.dummy_experience_1
-                )
-                session.add(user_experience_db_create_1)
-                session.commit()
-                session.refresh(user_experience_db_create_1)
-
-                user_experience_db_create_2 = ExperienceV1.from_orm(
-                    self.dummy_experience_2
-                )
-                session.add(user_experience_db_create_2)
-                session.commit()
-                session.refresh(user_experience_db_create_2)
-
-                # Add project fields to user
-                user_project_db_create_1 = ProjectV1.from_orm(self.dummy_project_1)
-                session.add(user_project_db_create_1)
-                session.commit()
-                session.refresh(user_project_db_create_1)
-
-                user_project_db_create_2 = ProjectV1.from_orm(self.dummy_project_2)
-                session.add(user_project_db_create_2)
-                session.commit()
-                session.refresh(user_project_db_create_2)
-
-                # Add language fields to user
-                user_language_db_create_1 = LanguageV1.from_orm(self.dummy_language_1)
-                session.add(user_language_db_create_1)
-                session.commit()
-                session.refresh(user_language_db_create_1)
-
-                user_language_db_create_2 = LanguageV1.from_orm(self.dummy_language_2)
-                session.add(user_language_db_create_2)
-                session.commit()
-                session.refresh(user_language_db_create_2)
-
-                user_language_db_create_3 = LanguageV1.from_orm(self.dummy_language_3)
-                session.add(user_language_db_create_3)
-                session.commit()
-                session.refresh(user_language_db_create_3)
-
-                user_language_db_create_4 = LanguageV1.from_orm(self.dummy_language_4)
-                session.add(user_language_db_create_4)
-                session.commit()
-                session.refresh(user_language_db_create_4)
-
-                # Add user_contact fields to user
-                user_user_contact_db_create_1 = ProfileV1.from_orm(self.dummy_profile)
-                session.add(user_user_contact_db_create_1)
-                session.commit()
-                session.refresh(user_user_contact_db_create_1)
-
-                # Add Certification fields to user
-                user_certification_db_create_1 = CertificationV1.from_orm(
-                    self.dummy_certification_1
-                )
-                session.add(user_certification_db_create_1)
-                session.commit()
-                session.refresh(user_certification_db_create_1)
-
-                user_certification_db_create_2 = CertificationV1.from_orm(
-                    self.dummy_certification_2
-                )
-                session.add(user_certification_db_create_2)
-                session.commit()
-                session.refresh(user_certification_db_create_2)
-
-                # Add Referee fields to user
-                user_referee_db_create_1 = RefereeV1.from_orm(self.dummy_referee_1)
-                session.add(user_referee_db_create_1)
-                session.commit()
-                session.refresh(user_referee_db_create_1)
-
-                user_referee_db_create_2 = RefereeV1.from_orm(self.dummy_referee_2)
-                session.add(user_referee_db_create_2)
-                session.commit()
-                session.refresh(user_referee_db_create_2)
-
-                return "Dummy_user with user_id {user_id} successfully created"
-            else:
-                return "Dummy_user or User with user_id {user_id} already exists"
+        if not created:
+            return f"Dummy data for user_id {self.user_id} already complete"
+        return f"Dummy data for user_id {self.user_id} seeded: {', '.join(created)}"

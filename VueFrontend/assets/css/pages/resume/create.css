@@ -1,0 +1,46 @@
+.col-md-2,
+.col-md-8 {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+/* For desktop view */
+.prev-link,
+.next-link {
+   display: inline-block;
+   padding: 8px 16px;
+   background-color: green;
+   border: 2px solid green;
+   color: white;
+   text-decoration: none;
+   border-radius: 10px;
+   transition: background-color 0.3s, border-color 0.3s;
+}
+
+.prev-link:hover,
+.next-link:hover {
+   background-color: purple;
+   border-color: gold;
+   border-radius: 10px;
+}
+
+/* For mobile view */
+@media (max-width: 767.98px) {
+
+   .col-md-2,
+   .col-md-8 {
+      display: block;
+   }
+
+   .prev-link,
+   .next-link {
+      display: block;
+      margin: 10px auto;
+      text-align: center;
+   }
+
+   .prev-link {
+      order: -1;
+   }
+}

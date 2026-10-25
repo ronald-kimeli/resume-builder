@@ -14,17 +14,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.footer {
-    /* position: block; */
-    color: white;
-    text-align: center;
-    background-color: #053116;
-    background-image: linear-gradient(to right, #064928, indigo);
-}
-
-.footer-padding {
-    margin-top: 20px;
-margin-bottom: 0px;
-}
-</style>
+<style scoped src="~/assets/css/components/Includes/Footer.css"></style>

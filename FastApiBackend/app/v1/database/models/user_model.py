@@ -1,4 +1,5 @@
-from pydantic import EmailStr, validator
+from pydantic import ConfigDict
+from pydantic import EmailStr, field_validator
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List, TYPE_CHECKING
 import phonenumbers
@@ -20,7 +21,8 @@ class UserV1Base(SQLModel):
     password: str = Field(index=True, nullable=False)
     phone_number: str = Field(index=True, nullable=False, unique=True)
 
-    @validator("phone_number")
+    @field_validator("phone_number")
+    @classmethod
     def phone_number_is_valid_number(cls, v):
         try:
             phone_number = phonenumbers.parse(v, None)
@@ -32,7 +34,8 @@ class UserV1Base(SQLModel):
         else:
             raise ValueError("Not a valid Phone Number")
 
-    @validator("phone_number")
+    @field_validator("phone_number")
+    @classmethod
     def phone_number_starts_with_country_code(cls, v: str):
         if v.startswith("+"):
             return v
@@ -44,44 +47,56 @@ class UserV1Base(SQLModel):
 # projects, and contact information.
 class UserV1(UserV1Base, table=True):
     user_id: int = Field(default=None, primary_key=True)
-    education_details: List["EducationV1"] = Relationship(back_populates="user")
-    experience_details: List["ExperienceV1"] = Relationship(back_populates="user")
-    language_details: List["LanguageV1"] = Relationship(back_populates="user")
-    project_details: List["ProjectV1"] = Relationship(back_populates="user")
-    profile_details: List["ProfileV1"] = Relationship(back_populates="user")
-    certification_details: List["CertificationV1"] = Relationship(back_populates="user")
-    referee_details: List["RefereeV1"] = Relationship(back_populates="user")
-    verification_details: List["VerificationV1"] = Relationship(back_populates="user")
+    education_details: List["EducationV1"] = Relationship(
+        back_populates="user", sa_relationship_kwargs={"lazy": "selectin"}
+    )
+    experience_details: List["ExperienceV1"] = Relationship(
+        back_populates="user", sa_relationship_kwargs={"lazy": "selectin"}
+    )
+    language_details: List["LanguageV1"] = Relationship(
+        back_populates="user", sa_relationship_kwargs={"lazy": "selectin"}
+    )
+    project_details: List["ProjectV1"] = Relationship(
+        back_populates="user", sa_relationship_kwargs={"lazy": "selectin"}
+    )
+    profile_details: List["ProfileV1"] = Relationship(
+        back_populates="user", sa_relationship_kwargs={"lazy": "selectin"}
+    )
+    certification_details: List["CertificationV1"] = Relationship(
+        back_populates="user", sa_relationship_kwargs={"lazy": "selectin"}
+    )
+    referee_details: List["RefereeV1"] = Relationship(
+        back_populates="user", sa_relationship_kwargs={"lazy": "selectin"}
+    )
+    verification_details: List["VerificationV1"] = Relationship(
+        back_populates="user", sa_relationship_kwargs={"lazy": "selectin"}
+    )
 
 
 # The `UserV1Create` class is a subclass of `UserV1Base` and includes a `Config` class with an `example`
 # attribute that provides an example JSON schema for creating a user.
 class UserV1Create(UserV1Base):
-    class Config:
-        schema_extra = {
-            "example": {
-                "email": "test_email_1@email.com",
-                "password": "test_password",
-                "phone_number": "+254712365478",
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "email": "test_email_1@email.com",
+            "password": "test_password",
+            "phone_number": "+254712365478",
         }
-
+    })
 
 # The `UserV1Read` class is a subclass of `UserV1Base` that includes a `user_id` attribute and a `Config`
 # class with an example schema.
 class UserV1Read(UserV1Base):
     user_id: int
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "email": "test_email_1@email.com",
-                "password": "test_password",
-                "phone_number": "+254712365478",
-                "user_id": "user_id",
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "email": "test_email_1@email.com",
+            "password": "test_password",
+            "phone_number": "+254712365478",
+            "user_id": "user_id",
         }
-
+    })
 
 # The `UserV1Update` class is a subclass of `UserV1Base` that allows for updating user information such as
 # name and password.
@@ -89,13 +104,11 @@ class UserV1Update(UserV1Base):
     name: Optional[str] = None
     password: Optional[str] = None
 
-    class Config:
-        exclude = {"user_id"}
-        schema_extra = {
-            "example": {
-                "email": "test_email_1@email.com",
-                "password": "test_password",
-                "phone_number": "+254712365478"
-                # "user_id": "User_id",
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "email": "test_email_1@email.com",
+            "password": "test_password",
+            "phone_number": "+254712365478"
+            # "user_id": "User_id",
         }
+    })

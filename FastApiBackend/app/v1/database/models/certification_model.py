@@ -1,3 +1,4 @@
+from pydantic import ConfigDict
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, TYPE_CHECKING
 import datetime
@@ -26,19 +27,17 @@ class CertificationV1CreateRequest(CertificationV1Base):
     # user_id: int
     pass
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "card_title": "Certification",
-                "school_name": "School_Name",
-                "school_type": "School_Type",
-                "certified_on": "Discipline",
-                "start_date": "yyyy-mm-dd",
-                "end_date": "yyyy-mm-dd",
-                # "user_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Certification",
+            "school_name": "School_Name",
+            "school_type": "School_Type",
+            "certified_on": "Discipline",
+            "start_date": "yyyy-mm-dd",
+            "end_date": "yyyy-mm-dd",
+            # "user_id": 0,
         }
-
+    })
 
 class CertificationV1Create(CertificationV1Base):
     user_id: Optional[int] = None
@@ -49,20 +48,18 @@ class CertificationV1Read(CertificationV1Base):
     user_id: int
     certification_id: int
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "card_title": "Certification",
-                "school_name": "School_Name",
-                "school_type": "School_Type",
-                "certified_on": "Discipline",
-                "start_date": "yyyy-mm-dd",
-                "end_date": "yyyy-mm-dd",
-                "user_id": 0,
-                "certification_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Certification",
+            "school_name": "School_Name",
+            "school_type": "School_Type",
+            "certified_on": "Discipline",
+            "start_date": "yyyy-mm-dd",
+            "end_date": "yyyy-mm-dd",
+            "user_id": 0,
+            "certification_id": 0,
         }
-
+    })
 
 class CertificationV1Update(SQLModel):
     card_title: Optional[str] = None
@@ -72,16 +69,14 @@ class CertificationV1Update(SQLModel):
     start_date: Optional[datetime.date] = None
     end_date: Optional[datetime.date] = None
 
-    class Config:
-        exclude = {"user_id"}
-        schema_extra = {
-            "example": {
-                "card_title": "Certification",
-                "school_name": "School_Name",
-                "school_type": "School_Type",
-                "certified_on": "Discipline",
-                "start_date": "yyyy-mm-dd",
-                "end_date": "yyyy-mm-dd",
-                # "user_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Certification",
+            "school_name": "School_Name",
+            "school_type": "School_Type",
+            "certified_on": "Discipline",
+            "start_date": "yyyy-mm-dd",
+            "end_date": "yyyy-mm-dd",
+            # "user_id": 0,
         }
+    })

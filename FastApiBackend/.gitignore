@@ -1,0 +1,45 @@
+# Environments / secrets
+.env
+.env.*
+!example.env
+.venv/
+venv/
+env/
+.python-version
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.tox/
+
+# Test / coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+nosetests.xml
+*.cover
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Docs build
+/site
+docs/_build/
+
+# Logs
+*.log
+
+# Editor / OS
+.idea/
+.vscode/
+.DS_Store
+*.sw?

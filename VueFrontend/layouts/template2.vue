@@ -10,18 +10,5 @@
 
 </script>
 
-<style scoped>
-
-main {
-    background: white !important;
-    width: 21cm !important;
-    height: 29.7cm !important;
-    margin-bottom: 3px !important;
-    margin-top: 5px !important;
-}
-.main {
-    padding: 6px !important;
-} 
-
-</style>
+<style scoped src="~/assets/css/layouts/template2.css"></style>
   

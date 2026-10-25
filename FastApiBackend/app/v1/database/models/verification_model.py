@@ -1,3 +1,4 @@
+from pydantic import ConfigDict
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, TYPE_CHECKING
 from datetime import datetime
@@ -17,9 +18,7 @@ class VerificationV1BaseModel(SQLModel):
 class PhoneVerificationV1Request(SQLModel):
     otp_code: int
 
-    class Config:
-        schema_extra = {"example": {"otp_code": "valid OTP code"}}
-
+    model_config = ConfigDict(json_schema_extra={"example": {"otp_code": "valid OTP code"}})
 
 class VerificationV1Read(SQLModel):
     status: bool

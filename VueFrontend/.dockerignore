@@ -1,5 +1,23 @@
-/.nuxt
-/node_modules
-
+# VCS / editor
+.git
 .gitignore
+.idea
+.vscode
+.fleet
+
+# Dependencies and build output are produced inside the image
+node_modules
+.nuxt
+.output
+.nitro
+.cache
+dist
+coverage
+
+# Logs / env / docs
+*.log
+.env
+.env.*
 README.md
+*Dockerfile
+.dockerignore

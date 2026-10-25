@@ -1,0 +1,17 @@
+#title {
+    background-color: #42428a !important;
+    color: #0a0a0a !important;
+
+}
+
+#title-head,
+#title-job {
+    text-transform: capitalize;
+    text-align: center !important;
+}
+
+.iconic-section2 {
+    text-align: start !important;
+    padding: auto !important;
+    width: auto !important;
+}

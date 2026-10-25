@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.core.db import get_db_session
-from sqlmodel import Session, select
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 from app.v1.database.models.verification_model import (
     VerificationV1Read,
     PhoneVerificationV1Request,
@@ -14,13 +15,13 @@ router = APIRouter(
 
 
 @router.post("/phone")
-def verify_otp_code(
+async def verify_otp_code(
     *,
-    session: Session = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db_session),
     user_id: int,
     phone_number_verification_request: PhoneVerificationV1Request,
 ):
-    user = session.exec(select(UserV1).where(UserV1.user_id == user_id)).one_or_none()
+    user = (await session.exec(select(UserV1).where(UserV1.user_id == user_id))).one_or_none()
     if user is None:
         raise HTTPException(status_code=404, detail="User not Found")
     else:
@@ -30,7 +31,7 @@ def verify_otp_code(
         ):
             verification_details_service = CreateVerificationDetails(session=session)
             updated_successfully = (
-                verification_details_service.update_phone_verified_field(
+                await verification_details_service.update_phone_verified_field(
                     user_id=user_id
                 )
             )

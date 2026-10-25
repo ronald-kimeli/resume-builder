@@ -1,0 +1,23 @@
+.prev-link,
+.next-link {
+   display: inline-block;
+   padding: 8px 16px;
+   background-color: green;
+   border: 2px solid green;
+   color: white;
+   text-decoration: none;
+   transition: background-color 0.3s, border-color 0.3s;
+}
+
+.prev-link:hover,
+.next-link:hover {
+   background-color: purple;
+   border-color: gold;
+}
+
+.col-md-3,
+.col-md-6 {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}

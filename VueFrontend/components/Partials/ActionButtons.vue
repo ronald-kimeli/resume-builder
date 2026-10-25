@@ -70,7 +70,5 @@
   });
   </script>
   
-  <style scoped>
-  /* Add your component-specific styles here */
-  </style>
+  <style scoped src="~/assets/css/components/Partials/ActionButtons.css"></style>
   

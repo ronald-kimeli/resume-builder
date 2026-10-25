@@ -30,4 +30,4 @@ defineProps({
 const emits = defineEmits();
 </script>
 
-<style scoped></style>
+<style scoped src="~/assets/css/components/Partials/Header.css"></style>

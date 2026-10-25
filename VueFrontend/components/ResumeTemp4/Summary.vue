@@ -16,9 +16,4 @@
 
 </script>
 
-<style scoped>
-.summary{
-    text-align: left !important;
-}
-
-</style>
+<style scoped src="~/assets/css/components/ResumeTemp4/Summary.css"></style>

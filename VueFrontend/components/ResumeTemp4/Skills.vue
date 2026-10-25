@@ -46,11 +46,4 @@
 
 </script>
 
-<style scoped>
-
-.skills {
-    text-align: left !important;
-}
-
-  
-</style>
+<style scoped src="~/assets/css/components/ResumeTemp4/Skills.css"></style>

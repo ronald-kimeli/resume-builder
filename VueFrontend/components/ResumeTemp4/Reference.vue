@@ -30,9 +30,4 @@
 
 </script>
 
-<style lang="scss" scoped>
-.reference {
-    text-align: left !important;
-}
-
-</style>
+<style lang="scss" scoped src="~/assets/css/components/ResumeTemp4/Reference.scss"></style>

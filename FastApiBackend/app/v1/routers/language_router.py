@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from app.core.db import get_db_session
 from typing import List
-from sqlmodel import Session
+from sqlmodel.ext.asyncio.session import AsyncSession
 from app.v1.database.services.language_services import LanguageCRUDServices
 from app.v1.database.models.language_model import (
     LanguageV1CreateRequest,
@@ -13,15 +13,15 @@ router = APIRouter(prefix="/user/{user_id}/language", tags=["Language Version 1"
 
 
 @router.get("/", response_model=List[LanguageV1Read])
-def read_user_language(*, session: Session = Depends(get_db_session), user_id: int):
+async def read_user_language(*, session: AsyncSession = Depends(get_db_session), user_id: int):
     langauge_crud_services = LanguageCRUDServices(session=session)
     return langauge_crud_services.read_user_lanngauge_details(user_id=user_id)
 
 
 @router.post("/", response_model=LanguageV1Read)
-def create_user_language(
+async def create_user_language(
     *,
-    session: Session = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db_session),
     user_id: int,
     user_language_request: LanguageV1CreateRequest,
 ):
@@ -32,9 +32,9 @@ def create_user_language(
 
 
 @router.patch("/{language_id}", response_model=LanguageV1Read)
-def update_user_langauge(
+async def update_user_langauge(
     *,
-    session: Session = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db_session),
     user_id: int,
     language_id: int,
     update_language: LanguageV1Update,
@@ -46,9 +46,9 @@ def update_user_langauge(
 
 
 @router.delete("/{language_id}")
-def delete_user_language(
+async def delete_user_language(
     *,
-    session: Session = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db_session),
     user_id: int,
     language_id: int,
 ):

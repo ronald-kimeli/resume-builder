@@ -240,4 +240,4 @@ onMounted(() => {
 
 </script>
 
-<style></style>
+<style src="~/assets/css/pages/resume/project/index.css"></style>

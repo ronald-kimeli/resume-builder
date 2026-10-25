@@ -14,12 +14,4 @@
 
 </script>
 
-<style scoped>
-#section-title {
-    border-bottom: 2px solid #080808 !important;
-}
-
-.summary{
-    text-align: left !important;
-}
-</style>
+<style scoped src="~/assets/css/components/ResumeTemp1/Summary.css"></style>

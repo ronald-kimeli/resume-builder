@@ -1,3 +1,4 @@
+from pydantic import ConfigDict
 from sqlmodel import Column, SQLModel, Field, Relationship, ARRAY, String
 import datetime
 from typing import Optional, List, TYPE_CHECKING
@@ -35,22 +36,20 @@ class ExperienceV1CreateRequest(ExperienceV1Base):
     # user_id: int
     pass
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "card_title": "Card Title",
-                "job_title": "Job title",
-                "company_name": "Company Name",
-                "company_url": "Company URL",
-                "location": "Location",
-                "job_description_title": "Job Description Title",
-                "job_descriptions": ["Description 1", "Description 2"],
-                "start_date": "yyyy-mm-dd",
-                "end_date": "yyyy-mm-dd",
-                # "user_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Card Title",
+            "job_title": "Job title",
+            "company_name": "Company Name",
+            "company_url": "Company URL",
+            "location": "Location",
+            "job_description_title": "Job Description Title",
+            "job_descriptions": ["Description 1", "Description 2"],
+            "start_date": "yyyy-mm-dd",
+            "end_date": "yyyy-mm-dd",
+            # "user_id": 0,
         }
-
+    })
 
 class ExperienceV1Create(ExperienceV1Base):
     user_id: Optional[int] = None
@@ -62,23 +61,21 @@ class ExperienceV1Read(ExperienceV1Base):
     user_id: int
     experience_id: int
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "card_title": "Card Title",
-                "job_title": "Job title",
-                "company_name": "Company Name",
-                "company_url": "Company URL",
-                "location": "Location",
-                "job_description_title": "Job Description Title",
-                "job_descriptions": ["Description 1", "Description 2"],
-                "start_date": "yyyy-mm-dd",
-                "end_date": "yyyy-mm-dd",
-                "user_id": 0,
-                "experience_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Card Title",
+            "job_title": "Job title",
+            "company_name": "Company Name",
+            "company_url": "Company URL",
+            "location": "Location",
+            "job_description_title": "Job Description Title",
+            "job_descriptions": ["Description 1", "Description 2"],
+            "start_date": "yyyy-mm-dd",
+            "end_date": "yyyy-mm-dd",
+            "user_id": 0,
+            "experience_id": 0,
         }
-
+    })
 
 # The `ExperienceV1Update` class represents an update to a user's experience, including job title,
 # company name, location, job descriptions, and dates.
@@ -93,19 +90,17 @@ class ExperienceV1Update(SQLModel):
     start_date: Optional[datetime.date] = None
     end_date: Optional[datetime.date] = None
 
-    class Config:
-        exclude = {"user_id"}
-        schema_extra = {
-            "example": {
-                "card_title": "Card Title",
-                "job_title": "Job title",
-                "company_name": "Company Name",
-                "company_url": "Company URL",
-                "location": "Location",
-                "job_description_title": "Job Description Title",
-                "job_descriptions": ["Description 1", "Description 2"],
-                "start_date": "yyyy-mm-dd",
-                "end_date": "yyyy-mm-dd",
-                # "user_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Card Title",
+            "job_title": "Job title",
+            "company_name": "Company Name",
+            "company_url": "Company URL",
+            "location": "Location",
+            "job_description_title": "Job Description Title",
+            "job_descriptions": ["Description 1", "Description 2"],
+            "start_date": "yyyy-mm-dd",
+            "end_date": "yyyy-mm-dd",
+            # "user_id": 0,
         }
+    })

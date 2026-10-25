@@ -252,4 +252,4 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style src="~/assets/css/pages/resume/experience/index.css"></style>

@@ -19,6 +19,9 @@ const getPageInstance = async (): Promise<Page> => {
     const browser = await getBrowserInstance();
     pageInstance = await browser.newPage();
     await pageInstance.setViewport({ width: 2100, height: 2970 });
+  } else {
+    // Clear the page content before reuse
+    await pageInstance.goto('about:blank');
   }
   return pageInstance;
 };
@@ -34,10 +37,34 @@ export default defineEventHandler(async (event: H3Event) => {
     // Get the page instance (reuse if already running)
     const page = await getPageInstance();
 
-    // Set content and wait for the DOM to load (faster than networkidle0)
-    await page.setContent(html, { waitUntil: 'domcontentloaded' });
+    // Enable request interception to block unnecessary resources
+    await page.setRequestInterception(true);
+    page.on('request', (req) => {
+      if (req.resourceType() === 'stylesheet' || req.resourceType() === 'font') {
+        req.abort();
+      } else {
+        req.continue();
+      }
+    });
 
-    // Inject necessary CSS to handle printing
+    // Set content and wait for the DOM and images to load
+    await page.setContent(html, { waitUntil: 'networkidle0' });
+
+    // Wait for all images to load
+    await page.evaluate(async () => {
+      const selectors = Array.from(document.querySelectorAll('img'));
+      await Promise.all(
+        selectors.map((img) => {
+          if (img.complete) return;
+          return new Promise((resolve) => {
+            img.addEventListener('load', resolve);
+            img.addEventListener('error', resolve); // Handle broken images
+          });
+        }),
+      );
+    });
+
+    // Inject necessary CSS for printing
     await page.addStyleTag({
       content: `
         @page {
@@ -118,7 +145,7 @@ export default defineEventHandler(async (event: H3Event) => {
       `,
     });
 
-    // Generate the PDF with exact A4 formatting and the required margins
+    // Generate the PDF
     const pdfBuffer: Uint8Array = await page.pdf({
       format: 'A4',
       margin: {
@@ -128,7 +155,7 @@ export default defineEventHandler(async (event: H3Event) => {
         left: '20mm',
       },
       printBackground: true,
-      displayHeaderFooter: false,  // Disable header/footer if not needed for performance
+      displayHeaderFooter: false,
     });
 
     // Send the PDF as response

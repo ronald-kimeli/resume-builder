@@ -54,18 +54,4 @@
 
 </script>
 
-<style scoped>
-#section-title {
-    border-bottom: 2px solid #080808 !important;
-}
-
-.skills {
-    text-align: left !important;
-}
-
-.iconic-section {
-    text-align: start !important;
-    padding: auto !important;
-    width: auto !important;
-}
-</style>
+<style scoped src="~/assets/css/components/ResumeTemp1/Skills.css"></style>

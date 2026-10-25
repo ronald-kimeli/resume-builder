@@ -8,6 +8,4 @@ Login
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped src="~/assets/css/components/Auth/Login.css"></style>

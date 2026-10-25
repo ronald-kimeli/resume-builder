@@ -34,9 +34,4 @@ const { certification } = defineProps(['certification']);
 
 </script>
 
-<style lang="scss" scoped>
-.certification {
-    text-align: left !important;
-}
-
-</style>
+<style lang="scss" scoped src="~/assets/css/components/ResumeTemp3/Certification.scss"></style>

@@ -1,15 +1,18 @@
-africastalking==1.2.5
-alembic==1.11.2
-email-validator==2.0.0.post2
-fastapi==0.98.0
-httpx==0.24.1
-pyotp==2.9.0
-phonenumbers==8.13.18
-pydantic==1.10.12
-python-dotenv==1.0.0
-python-multipart==0.0.6
-uvicorn==0.22.0
-SQLAlchemy==2.0.32
-psycopg2-binary
-asyncpg
-sqlmodel
+# Latest releases at the time of writing; lower bounds only so rebuilds pick up newer ones.
+fastapi>=0.162
+uvicorn[standard]>=0.54      # uvloop + httptools
+aio-pika>=9.5                # RabbitMQ publisher (events -> Node socket server)
+sqlmodel>=0.0.48
+SQLAlchemy[asyncio]>=2.1
+asyncpg>=0.32                # async driver used by the app
+psycopg2-binary>=2.9         # sync driver used by alembic
+alembic>=1.20
+pydantic>=2.14
+pydantic-settings>=2.16
+email-validator>=2.3
+phonenumbers>=9.0
+pyotp>=2.10
+africastalking>=2.0
+python-multipart>=0.0.32
+python-dotenv>=1.2
+httpx>=0.28

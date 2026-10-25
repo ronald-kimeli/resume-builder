@@ -18,9 +18,4 @@ const { languages } = defineProps(['languages'])
 
 </script>
 
-<style lang="scss" scoped>
-.languages {
-  text-align: left !important;
-}
-
-</style>
+<style lang="scss" scoped src="~/assets/css/components/ResumeTemp3/Languages.scss"></style>

@@ -1,3 +1,4 @@
+from pydantic import ConfigDict
 from sqlmodel import Column, SQLModel, Field, Relationship, ARRAY, String
 from typing import Optional, List, TYPE_CHECKING
 
@@ -14,7 +15,7 @@ class ProjectV1Base(SQLModel):
     project_description: List[str] = Field(
         default=None, sa_column=Column(ARRAY(String()))
     )
-    project_url: Optional[str]
+    project_url: Optional[str] = None
 
 
 # The `ProjectV1` class represents a project with a unique project ID, associated with a user and a list
@@ -31,18 +32,16 @@ class ProjectV1CreateRequest(ProjectV1Base):
     # user_id: int
     pass
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "card_title": "Card Title",
-                "project_name": "Project Name",
-                "project_description_title": "Project Description Title",
-                "project_description": ["Description 1", "Description 2"],
-                "project_url": "project_url.com",
-                # "user_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Card Title",
+            "project_name": "Project Name",
+            "project_description_title": "Project Description Title",
+            "project_description": ["Description 1", "Description 2"],
+            "project_url": "project_url.com",
+            # "user_id": 0,
         }
-
+    })
 
 class ProjectV1Create(ProjectV1Base):
     user_id: Optional[int] = None
@@ -54,19 +53,17 @@ class ProjectV1Read(ProjectV1Base):
     user_id: int
     project_id: int
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "card_title": "Card Title",
-                "project_name": "Project Name",
-                "project_description_title": "Project Description Title",
-                "project_description": ["Description 1", "Description 2"],
-                "project_url": "project_url.com",
-                "user_id": 0,
-                "project_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Card Title",
+            "project_name": "Project Name",
+            "project_description_title": "Project Description Title",
+            "project_description": ["Description 1", "Description 2"],
+            "project_url": "project_url.com",
+            "user_id": 0,
+            "project_id": 0,
         }
-
+    })
 
 # The `ProjectV1Update` class is a model for updating project information, including the card title,
 # project name, project description title, project description, and project URL.
@@ -77,15 +74,13 @@ class ProjectV1Update(SQLModel):
     project_description: Optional[List[str]] = None
     project_url: Optional[str] = None
 
-    class Config:
-        exclude = {"user_id"}
-        schema_extra = {
-            "example": {
-                "card_title": "Card Title",
-                "project_name": "Project Name",
-                "project_description_title": "Project Description Title",
-                "project_description": ["Description 1", "Description 2"],
-                "project_url": "project_url.com",
-                # "user_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Card Title",
+            "project_name": "Project Name",
+            "project_description_title": "Project Description Title",
+            "project_description": ["Description 1", "Description 2"],
+            "project_url": "project_url.com",
+            # "user_id": 0,
         }
+    })

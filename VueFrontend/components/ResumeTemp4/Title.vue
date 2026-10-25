@@ -45,4 +45,4 @@
 
 </script>
 
-<style scoped></style>
+<style scoped src="~/assets/css/components/ResumeTemp4/Title.css"></style>

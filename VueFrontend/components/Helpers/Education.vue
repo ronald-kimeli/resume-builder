@@ -25,6 +25,4 @@
         const { education } = defineProps(['education'])
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped src="~/assets/css/components/Helpers/Education.scss"></style>

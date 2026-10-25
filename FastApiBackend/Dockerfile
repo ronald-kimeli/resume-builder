@@ -1,14 +1,25 @@
-FROM python:3.11.6-alpine
+# syntax=docker/dockerfile:1
+# Python version comes from the root docker-compose.yml (build arg).
+ARG PYTHON_VERSION=3.14
+FROM python:${PYTHON_VERSION}-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
 
 WORKDIR /FastApiBackend
 
-# Copy requirements.txt to install dependencies
-COPY requirements.txt requirements.txt
+# Dependencies first so this layer is cached until requirements.txt changes
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# Install dependencies from requirements.txt
-RUN pip install --only-binary=:all: -r requirements.txt
-
-# Copy the rest of the application code
 COPY . .
 
-CMD ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "5000"]
+RUN useradd --create-home appuser && chown -R appuser /FastApiBackend
+USER appuser
+
+EXPOSE 5000
+
+# uvloop + httptools come from uvicorn[standard]. Push updates are not served here:
+# events go to RabbitMQ and the Node socket server delivers them to browsers.
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]

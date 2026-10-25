@@ -373,4 +373,4 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style src="~/assets/css/pages/resume/profile/create.css"></style>

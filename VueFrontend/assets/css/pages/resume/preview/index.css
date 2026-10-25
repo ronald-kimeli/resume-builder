@@ -1,0 +1,64 @@
+/* A4 Page Layout for PDF */
+.pdf-content {
+  max-width: 210mm;
+  /* A4 Page width */
+  margin: 0 auto;
+  padding: 10mm;
+  box-sizing: border-box;
+  page-break-before: always;
+}
+
+/* Two-column Layout for sections */
+.resume-columns {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.left-column,
+.right-column {
+  width: 48%;
+  box-sizing: border-box;
+}
+
+/* Hide the button in UI but show it during PDF generation */
+.hide-for-print {
+  display: block;
+}
+
+@media print {
+  .hide-for-print {
+    display: none;
+    /* Hide the button when printing */
+  }
+
+  /* PDF content layout adjustments */
+  .pdf-content {
+    padding: 10mm;
+    page-break-before: always;
+  }
+}
+
+/* Styling for the Resume Sections */
+.resume-section {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}

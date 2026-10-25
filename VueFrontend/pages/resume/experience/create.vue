@@ -230,4 +230,4 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style src="~/assets/css/pages/resume/experience/create.css"></style>

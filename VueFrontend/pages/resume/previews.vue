@@ -556,36 +556,4 @@ export default defineComponent({
 });
 </script>
 
-<style>
-.template3 {
-  user-select: text;
-}
-
-.export-icon {
-  font-size: 36px;
-  color: #28a745;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-
-.export-icon:hover {
-  color: #218838;
-}
-
-.export-icon.disabled {
-  color: #6c757d;
-  cursor: not-allowed;
-}
-
-.d-flex {
-  display: flex;
-}
-
-.justify-content-center {
-  justify-content: center;
-}
-
-.mb-2 {
-  margin-bottom: 0.5rem !important;
-}
-</style>
+<style src="~/assets/css/pages/resume/previews.css"></style>

@@ -17,7 +17,7 @@ v1_router = APIRouter(prefix="/api/v1")
 
 
 @v1_router.get("/", response_model=HealthCheck, tags=["Status Version 1"])
-def health_check() -> dict:
+async def health_check() -> dict:
     return {
         "name": settings.project_name,
         "version": "1.0.0",

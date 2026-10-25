@@ -147,4 +147,4 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style src="~/assets/css/pages/resume/language/create.css"></style>

@@ -39,7 +39,4 @@
   
   </script>
   
-  <style scoped>
-
-
-</style>
+  <style scoped src="~/assets/css/pages/resume/freetrial/index.css"></style>

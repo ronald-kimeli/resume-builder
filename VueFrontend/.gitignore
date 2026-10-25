@@ -1,27 +1,54 @@
-# Nuxt dev/build outputs
-.output
+# Nuxt build / dev output
 .nuxt
+.output
 .nitro
 .cache
 dist
+dist-ssr
+.data
 
-# Resume example
-MarvinMbithiMbathaResume.pdf
-
-
-# Node dependencies
+# Dependencies (the lockfile pnpm-lock.yaml IS committed)
 node_modules
+.pnpm-store
+.pnpm-debug.log*
+package-lock.json
+yarn.lock
+.yarn
 
 # Logs
 logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Misc
-.DS_Store
-.fleet
-.idea
+# Tests / coverage
+coverage
+/cypress/videos/
+/cypress/screenshots/
+
+# Generated files
+*.pdf
+*.local
 
 # Local env files
 .env
 .env.*
 !.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.fleet
+.idea
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Scratch pages
+*copy*.vue

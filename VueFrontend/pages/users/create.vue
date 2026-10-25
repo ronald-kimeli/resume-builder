@@ -105,28 +105,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-
-.form-control .border-danger  {
-  border: 2px solid #921f1f !important;
-  background-color: #921f1f !important;
-  content: "!";
-        position: absolute;
-        top: 50%;
-        right: 10px; /* Adjust the spacing as needed */
-        transform: translateY(-50%);
-        color: red;
-        font-weight: bold;
-}
-.error {
-  border: 1px solid red;
-}
-
-.error-text {
-  color: red;
-  margin-top: 5px;
-}
-</style>
+<style scoped src="~/assets/css/pages/users/create.css"></style>
 
 
 

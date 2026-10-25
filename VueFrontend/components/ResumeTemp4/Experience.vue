@@ -160,41 +160,4 @@
 
 </script>
 
-<style scoped>
-.experience {
-  text-align: left !important;
-}
-
-#experience-title {
-  text-align: start !important;
-  text-decoration: none !important;
-  width: auto !important;
-}
-
-img {
-  background-color: inherit !important;
-  height: 20px !important;
-  width: 20px !important;
-  margin-right: 4px !important;
-}
-
-.company-title {
-  background-color: inherit !important;
-  size: 20px !important;
-}
-
-.parent {
-  columns: 2;
-  gap: 10px;
-  padding: 5px;
-  margin: 0 auto;
-}
-
-.child {
-  padding: 10px;
-  background-color: white;
-  display: inline-block;
-  width: 100%;
-  margin-bottom: 5px;
-}
-</style>
+<style scoped src="~/assets/css/components/ResumeTemp4/Experience.css"></style>

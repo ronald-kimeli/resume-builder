@@ -1,0 +1,12 @@
+.footer {
+    /* position: block; */
+    color: white;
+    text-align: center;
+    background-color: #053116;
+    background-image: linear-gradient(to right, #064928, indigo);
+}
+
+.footer-padding {
+    margin-top: 20px;
+margin-bottom: 0px;
+}

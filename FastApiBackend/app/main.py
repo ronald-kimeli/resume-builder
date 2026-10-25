@@ -1,4 +1,10 @@
-from fastapi import FastAPI, Depends
+import asyncio
+import re
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 # imports below are essential in loading version 1 models to avoid circular import error
 from app.v1.database.models.user_model import UserV1
@@ -13,25 +19,41 @@ from app.v1.database.models.verification_model import VerificationV1
 from app.v1.database.models.health_status_model import HealthCheck
 
 from app import settings
-
-# from app.core.models import HealthCheck
-from fastapi.middleware.cors import CORSMiddleware
-from app.v1.database.dummy_data.loader import LoadDummyData
-
 from app.core.db import initialize_db
+from app.core.events import publisher
 from app.v1 import v1_router
-from pathlib import Path
-import uvicorn
+from app.v1.database.dummy_data.loader import LoadDummyData
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 ALEMBIC_CONFIG_FILE = BASE_DIR / "alembic.ini"
+
+DUMMY_USERS = (
+    (1, "test_email_1@email.com", "+254711215654"),
+    (2, "test_email_2@email.com", "+254711217654"),
+    (3, "test_email_3@email.com", "+254712215654"),
+)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await initialize_db()
+    # seed sequentially so the unique email/phone constraints never race
+    for user_id, email, phone in DUMMY_USERS:
+        print(
+            await LoadDummyData(
+                user_id=user_id, dummy_email=email, dummy_phone_number=phone
+            ).create_user()
+        )
+    yield
+    await publisher.close()
 
 
 app = FastAPI(
     title=settings.project_name,
     version=settings.version,
     debug=settings.debug,
+    lifespan=lifespan,
 )
 
 origins = [
@@ -48,33 +70,38 @@ app.add_middleware(
 )
 app.include_router(v1_router.v1_router)
 
+# /api/v1/user/{id}/<anything> mutations change that user's resume data
+_USER_RESUME_PATH = re.compile(rf"^{re.escape(v1_router.v1_router.prefix)}/user/(\d+)/")
+_background: set[asyncio.Task] = set()  # strong refs so tasks aren't garbage-collected
+_MUTATING = {"POST", "PUT", "PATCH", "DELETE"}
 
-@app.on_event("startup")
-def on_startup():
-    initialize_db()
-    # initialize dummy data generator class
-    dummy_data_loader_1 = LoadDummyData(
-        user_id=1,
-        dummy_email="test_email_1@email.com",
-        dummy_phone_number="+254711215654",
-    )
-    dummy_data_loader_2 = LoadDummyData(
-        user_id=2,
-        dummy_email="test_email_2@email.com",
-        dummy_phone_number="+254711217654",
-    )
-    dummy_data_loader_3 = LoadDummyData(
-        user_id=3,
-        dummy_email="test_email_3@email.com",
-        dummy_phone_number="+254712215654",
-    )
 
-    print(dummy_data_loader_1.create_user())
-    print(dummy_data_loader_2.create_user())
-    print(dummy_data_loader_3.create_user())
+@app.middleware("http")
+async def notify_resume_change(request: Request, call_next):
+    response = await call_next(request)
+    if request.method in _MUTATING and response.status_code < 400:
+        match = _USER_RESUME_PATH.match(request.url.path)
+        if match:
+            user_id = int(match.group(1))
+            # fire-and-forget: never delay the HTTP response for the broker
+            task = asyncio.create_task(
+                publisher.publish(
+                    user_id,
+                    {
+                        "event": "resume.updated",
+                        "user_id": user_id,
+                        "method": request.method,
+                        "path": request.url.path,
+                    },
+                )
+            )
+            _background.add(task)
+            task.add_done_callback(_background.discard)
+    return response
+
 
 @app.get("/", response_model=HealthCheck, tags=["Status"])
-def health_check() -> dict:
+async def health_check() -> dict:
     return {
         "name": settings.project_name,
         "version": settings.version,

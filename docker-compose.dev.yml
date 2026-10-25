@@ -1,0 +1,22 @@
+# Dev overrides: bind-mounted source, hot reload, pnpm dev server.
+services:
+  resume-bulder-fastapi_backend:
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000", "--reload", "--ws", "websockets"]
+    volumes:
+      - ./FastApiBackend:/FastApiBackend
+
+  socket_server:
+    command: ["node", "--watch", "server.js"]
+    volumes:
+      - ./SocketServer/server.js:/app/server.js
+
+  vue_frontend:
+    build:
+      dockerfile: Dev.Dockerfile
+    ports: !override
+      - 5173:5173
+      - 24678:24678
+    volumes:
+      - ./VueFrontend:/app
+      - /app/node_modules
+    command: ["pnpm", "dev", "--host", "0.0.0.0"]

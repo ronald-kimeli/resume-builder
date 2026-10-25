@@ -49,4 +49,4 @@
   const { user_profile } = defineProps(['user_profile'])
 </script>
 
-<style scoped></style>
+<style scoped src="~/assets/css/components/ResumeTemp3/Title.css"></style>

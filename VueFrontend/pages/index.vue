@@ -111,4 +111,4 @@ useHead({
 
 </script>
 
-<style scoped></style>
+<style scoped src="~/assets/css/pages/index.css"></style>

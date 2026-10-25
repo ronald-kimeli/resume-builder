@@ -1,3 +1,4 @@
+from pydantic import ConfigDict
 from sqlmodel import SQLModel, Field, Relationship
 import datetime
 from typing import TYPE_CHECKING, Optional
@@ -34,21 +35,19 @@ class EducationV1CreateRequest(EducationV1Base):
     # user_id: int
     pass
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "card_title": "Card Title",
-                "school_name": "School Name",
-                "education_level": "Education Level",
-                "course_title": "Course Title",
-                "location": "Location",
-                "final_grade": "Final Grade",
-                "start_date": "yyyy-mm-dd",
-                "end_date": "yyyy-mm-dd",
-                # "user_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Card Title",
+            "school_name": "School Name",
+            "education_level": "Education Level",
+            "course_title": "Course Title",
+            "location": "Location",
+            "final_grade": "Final Grade",
+            "start_date": "yyyy-mm-dd",
+            "end_date": "yyyy-mm-dd",
+            # "user_id": 0,
         }
-
+    })
 
 class EducationV1Create(EducationV1Base):
     user_id: Optional[int] = None
@@ -60,22 +59,20 @@ class EducationV1Read(EducationV1Base):
     user_id: int
     education_id: int
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "card_title": "Card Title",
-                "school_name": "School Name",
-                "education_level": "Education Level",
-                "course_title": "Course Title",
-                "location": "Location",
-                "final_grade": "Final Grade",
-                "start_date": "yyyy-mm-dd",
-                "end_date": "yyyy-mm-dd",
-                "user_id": 0,
-                "education_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Card Title",
+            "school_name": "School Name",
+            "education_level": "Education Level",
+            "course_title": "Course Title",
+            "location": "Location",
+            "final_grade": "Final Grade",
+            "start_date": "yyyy-mm-dd",
+            "end_date": "yyyy-mm-dd",
+            "user_id": 0,
+            "education_id": 0,
         }
-
+    })
 
 # The `EducationV1Update` class represents an update to a user's education information, including
 # details such as card title, school name, education level, course title, location, final grade, start
@@ -90,18 +87,16 @@ class EducationV1Update(SQLModel):
     start_date: Optional[datetime.date] = None
     end_date: Optional[datetime.date] = None
 
-    class Config:
-        exclude = {"user_id"}
-        schema_extra = {
-            "example": {
-                "card_title": "Card Title",
-                "school_name": "School Name",
-                "education_level": "Education Level",
-                "course_title": "Course Title",
-                "location": "Location",
-                "final_grade": "Final Grade",
-                "start_date": "yyyy-mm-dd",
-                "end_date": "yyyy-mm-dd",
-                # "user_id": 0,
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "card_title": "Card Title",
+            "school_name": "School Name",
+            "education_level": "Education Level",
+            "course_title": "Course Title",
+            "location": "Location",
+            "final_grade": "Final Grade",
+            "start_date": "yyyy-mm-dd",
+            "end_date": "yyyy-mm-dd",
+            # "user_id": 0,
         }
+    })

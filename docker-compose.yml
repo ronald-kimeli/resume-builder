@@ -1,0 +1,119 @@
+# Versions of the runtimes live here so one file controls them.
+# Override per shell or in a root .env, e.g. PYTHON_VERSION=3.13 docker compose build
+#   docker compose up -d --build                                   # production-like
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build   # hot reload
+
+x-versions:
+  python: &python_version ${PYTHON_VERSION:-3.14}
+  node: &node_version ${NODE_VERSION:-26}
+  pnpm: &pnpm_version ${PNPM_VERSION:-latest}
+
+services:
+  # FastAPI backend (async SQLAlchemy + asyncpg); publishes resume events to RabbitMQ
+  resume-bulder-fastapi_backend:
+    build:
+      context: ./FastApiBackend
+      args:
+        PYTHON_VERSION: *python_version
+    image: resume-bulder-fastapi_backend
+    container_name: resume-bulder-fastapi_backend
+    restart: unless-stopped
+    env_file:
+      - ./FastApiBackend/.env
+    environment:
+      # inside the compose network the DB host is the service name, not localhost
+      - DB_CONNECTION_STR=postgresql://${DB_USER}:${DB_PASSWORD}@resume_builder_db:5432/${DB_NAME}
+      - RABBITMQ_URL=amqp://${RABBITMQ_USER:-resume}:${RABBITMQ_PASSWORD:-resume}@rabbitmq:5672/
+    ports:
+      - 5000:5000
+    depends_on:
+      resume_builder_db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  # Tiny Node WebSocket server: RabbitMQ -> browsers (/ws/user/{id})
+  socket_server:
+    build:
+      context: ./SocketServer
+      args:
+        NODE_VERSION: *node_version
+        PNPM_VERSION: *pnpm_version
+    image: resume-socket-server
+    container_name: resume_socket_server
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_URL=amqp://${RABBITMQ_USER:-resume}:${RABBITMQ_PASSWORD:-resume}@rabbitmq:5672/
+    ports:
+      - 4000:4000
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  rabbitmq:
+    image: rabbitmq:${RABBITMQ_VERSION:-4}-management-alpine
+    container_name: resume_rabbitmq
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-resume}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-resume}
+    ports:
+      - 5672:5672
+      - 15672:15672   # management UI
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  # Nuxt frontend, built with pnpm inside the image (nothing to build on the host)
+  vue_frontend:
+    build:
+      context: ./VueFrontend
+      dockerfile: Prod.Dockerfile
+      args:
+        NODE_VERSION: *node_version
+        PNPM_VERSION: *pnpm_version
+        BASE_URL: ${RESUME_BASE_URL:-http://localhost:5000/api/v1}
+    image: vuefrontend
+    container_name: vue_frontend
+    restart: unless-stopped
+    environment:
+      - NUXT_PUBLIC_BASE_URL=${RESUME_BASE_URL:-http://localhost:5000/api/v1}
+      - NUXT_PUBLIC_SOCKET_URL=${RESUME_SOCKET_URL:-ws://localhost:4000}
+    ports:
+      - 5173:3000
+    depends_on:
+      - resume-bulder-fastapi_backend
+
+  resume_builder_db:
+    image: postgres:15.3-alpine3.18
+    container_name: resume_builder_db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - resume-builder-postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # resume_builder_pgadmin:
+  #   container_name: resume_builder_pgadmin
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+  #     - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+  #   ports:
+  #     - 5050:80
+  #   depends_on:
+  #     - resume_builder_db
+
+volumes:
+  resume-builder-postgres-data:

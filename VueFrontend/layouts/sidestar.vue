@@ -76,7 +76,7 @@
         <footer class="py-4 bg-light mt-auto">
           <div class="container-fluid px-4">
             <div class="d-flex align-items-center justify-content-between small">
-              <div class="text-muted">Copyright &copy; 2024</div>
+              <div class="text-muted">Copyright &copy; {{ currentYear }}</div>
               <div>
                 <a href="#">Be an inspiration!</a>
               </div>
@@ -93,6 +93,7 @@ import { ref, watch, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getNavLinks } from '~/assets/sidebar/js/navigation';
 const navLinks = getNavLinks();
+const currentYear = new Date().getFullYear();
 
 // Import the image
 import profileImage from '~/assets/img/admin.jpg'

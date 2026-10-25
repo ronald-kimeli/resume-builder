@@ -37,23 +37,4 @@
 
 </script>
 
-<style scoped>
-#title {
-    background-color: white !important;
-    color: #0a0a0a !important;
-
-}
-
-#title-head,
-#title-job {
-    text-transform: capitalize;
-    text-align: center !important;
-
-}
-
-.iconic-section {
-    text-align: start !important;
-    padding: auto !important;
-    width: auto !important;
-}
-</style>
+<style scoped src="~/assets/css/components/ResumeTemp1/Title.css"></style>

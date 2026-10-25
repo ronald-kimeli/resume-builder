@@ -14,12 +14,14 @@ Backend Git Branch
 ------------------
 
 * FastApiBackend - Is the main high performing backend which is fully API driven.
+* SocketServer - Small Node.js WebSocket server that pushes live resume updates to the browser.
 
 Table of Contents
 -----------------
 
 * [Requirements](#requirements)
 * [Usage](#usage)
+* [Socket Server](#socket-server)
 
 Requirements
 ------------
@@ -84,3 +86,60 @@ docker compose build --no-cache && docker compose up -d
 * Now check your terminal if everything is already started - On your browser at the url `http://localhost:5173/` if frontend and `http://localhost:5000/` is backend
 
 
+Socket Server
+-------------
+
+`SocketServer` is a small stateless Node.js service (`ws` + `amqplib`) that keeps open previews and forms in sync without polling.
+
+How it works:
+
+1. FastAPI publishes a `resume.updated` event to the RabbitMQ topic exchange `resume.events` with routing key `user.<id>` whenever a section of that user's resume changes.
+2. Every socket server instance binds its own exclusive queue to `user.*`, so every instance sees every event.
+3. The server forwards the message to the browsers connected to `/ws/user/<id>`. The Vue frontend uses the `useResumeSocket` composable to refetch data when an event arrives.
+
+Because instances hold no shared state, you can run as many replicas as you like behind a load balancer.
+
+### Configuration
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `PORT` | `4000` | Port the server listens on |
+| `RABBITMQ_URL` | `amqp://guest:guest@rabbitmq:5672/` | RabbitMQ connection string |
+| `RABBITMQ_EXCHANGE` | `resume.events` | Topic exchange to consume from |
+
+Root `.env` (see `example.env`):
+
+```bash
+RABBITMQ_USER=resume
+RABBITMQ_PASSWORD=resume
+RESUME_SOCKET_URL=ws://localhost:4000   # URL the browser uses to reach the socket server
+```
+
+### Endpoints
+
+* `ws://localhost:4000/ws/user/<id>` - WebSocket for a user's events (messages are limited to 1 KB).
+* `http://localhost:4000/health` - returns `{ "broker": true, "connections": 0 }`; responds `503` while RabbitMQ is unreachable.
+
+The server answers an application-level `ping` text message with `{"event":"pong"}`, and drops dead connections with protocol pings every 30s. It reconnects to RabbitMQ with exponential backoff (max 15s) and closes sockets gracefully on `SIGTERM`.
+
+### Running
+
+It starts with the rest of the stack:
+
+```bash
+docker compose up -d
+```
+
+To run it on its own (Node 24+ and a reachable RabbitMQ):
+
+```bash
+cd SocketServer
+pnpm install
+RABBITMQ_URL=amqp://resume:resume@localhost:5672/ pnpm start
+```
+
+Quick check with [websocat](https://github.com/vi/websocat):
+
+```bash
+websocat ws://localhost:4000/ws/user/1
+```
